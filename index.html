@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmzetKu — Hitung Omzet & Profit</title>
+    <meta name="description"
+          content="Kelola omzet, modal, transaksi, dan keuntungan usaha dengan mudah menggunakan OmzetKu.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg: #f7f8fa;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --primary: #111827;
+            --primary-hover: #000000;
+            --green: #16a34a;
+            --green-light: #f0fdf4;
+        }
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .container {
+            width: min(1120px, calc(100% - 40px));
+            margin: auto;
+        }
+        /* NAVBAR */
+        nav {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 20px;
+        }
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            transition: .2s;
+            cursor: pointer;
+        }
+        .btn-light {
+            background: white;
+        }
+        .btn-light:hover {
+            background: #f3f4f6;
+        }
+        .btn-dark {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .btn-dark:hover {
+            background: var(--primary-hover);
+        }
+        /* HERO */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 13px;
+            background: var(--green-light);
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+        }
+        .hero h1 {
+            max-width: 800px;
+            margin: auto;
+            font-size: clamp(42px, 7vw, 76px);
+            line-height: 1.05;
+            letter-spacing: -3px;
+            font-weight: 800;
+        }
+        .hero h1 span {
+            color: #6b7280;
+        }
+        .hero p {
+            max-width: 620px;
+            margin: 25px auto 0;
+            color: var(--muted);
+            font-size: 17px;
+        }
+        .hero-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .hero-buttons .btn {
+            padding: 14px 22px;
+        }
+        /* CALCULATOR PREVIEW */
+        .preview {
+            margin: 45px auto 0;
+            max-width: 900px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.06);
+            text-align: left;
+        }
+        .preview-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .preview-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .online {
+            font-size: 12px;
+            color: #15803d;
+            background: var(--green-light);
+            padding: 6px 10px;
+            border-radius: 999px;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .stat {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 17px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .stat-value {
+            margin-top: 5px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .profit {
+            color: var(--green);
+        }
+        /* FEATURES */
+        .section {
+            padding: 80px 0;
+        }
+        .section-heading {
+            text-align: center;
+            max-width: 650px;
+            margin: auto;
+        }
+        .section-heading h2 {
+            font-size: 36px;
+            letter-spacing: -1px;
+            line-height: 1.15;
+        }
+        .section-heading p {
+            margin-top: 12px;
+            color: var(--muted);
+        }
+        .features {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+        .feature {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+        }
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 18px;
+        }
+        .feature h3 {
+            font-size: 17px;
+        }
+        .feature p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        /* EXAMPLE */
+        .example {
+            background: #111827;
+            color: white;
+            border-radius: 24px;
+            padding: 45px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        .example h2 {
+            font-size: 34px;
+            line-height: 1.2;
+        }
+        .example p {
+            color: #9ca3af;
+            margin-top: 12px;
+        }
+        .example-card {
+            background: white;
+            color: var(--text);
+            border-radius: 18px;
+            padding: 22px;
+        }
+        .example-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        .example-row:last-child {
+            border-bottom: none;
+        }
+        .example-profit {
+            color: var(--green);
+            font-weight: 800;
+            font-size: 22px;
+        }
+        /* CTA */
+        .cta {
+            text-align: center;
+            padding: 90px 20px;
+        }
+        .cta h2 {
+            font-size: 40px;
+            letter-spacing: -1px;
+        }
+        .cta p {
+            color: var(--muted);
+            margin: 12px auto 25px;
+            max-width: 550px;
+        }
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 30px 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        /* MOBILE */
+        @media (max-width: 700px) {
+            .container {
+                width: min(100% - 28px, 1120px);
+            }
+            nav {
+                height: 64px;
+            }
+            .nav-buttons .btn-light {
+                display: none;
+            }
+            .hero {
+                padding: 60px 0 35px;
+            }
+            .hero h1 {
+                font-size: 45px;
+                letter-spacing: -2px;
+            }
+            .hero p {
+                font-size: 15px;
+            }
+            .calc-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 60px 0;
+            }
+            .section-heading h2 {
+                font-size: 29px;
+            }
+            .example {
+                grid-template-columns: 1fr;
+                padding: 28px;
+                gap: 25px;
+            }
+            .example h2 {
+                font-size: 29px;
+            }
+            .cta h2 {
+                font-size: 32px;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <div class="logo-icon">O</div>
+                    OmzetKu
+                </a>
+                <div class="nav-buttons">
+                    <a href="#fitur" class="btn btn-light">
+                        Fitur
+                    </a>
+                    <a href="#mulai" class="btn btn-dark">
+                        Mulai
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Pencatatan usaha pribadi
+                </div>
+                <h1>
+                    Catat omzet.
+                    <span>Hitung untungnya.</span>
+                </h1>
+                <p>
+                    Kelola penjualan, modal, omzet, dan keuntungan
+                    dalam satu dashboard sederhana yang bisa kamu akses
+                    kapan saja.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#mulai" class="btn btn-dark">
+                        Mulai sekarang →
+                    </a>
+                    <a href="#contoh" class="btn btn-light">
+                        Lihat contoh
+                    </a>
+                </div>
+                <!-- DASHBOARD PREVIEW -->
+                <div class="preview">
+                    <div class="preview-top">
+                        <div class="preview-title">
+                            Ringkasan hari ini
+                        </div>
+                        <div class="online">
+                            ● Sistem aktif
+                        </div>
+                    </div>
+                    <div class="calc-grid">
+                        <div class="stat">
+                            <div class="stat-label">
+                                Modal
+                            </div>
+                            <div class="stat-value">
+                                Rp600.000
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">
+                                Omzet
+                            </div>
+                            <div class="stat-value">
+                                Rp650.000
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">
+                                Profit
+                            </div>
+                            <div class="stat-value profit">
+                                +Rp50.000
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">
+                                Margin
+                            </div>
+                            <div class="stat-value">
+                                7,69%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FEATURES -->
+        <section class="section" id="fitur">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>
+                        Semua yang kamu butuhkan
+                        untuk menghitung usaha.
+                    </h2>
+                    <p>
+                        Tidak perlu Excel atau kalkulator manual.
+                        Masukkan angka, sistem yang menghitung.
+                    </p>
+                </div>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            🧮
+                        </div>
+                        <h3>
+                            Kalkulator Profit
+                        </h3>
+                        <p>
+                            Masukkan harga supplier dan harga jual.
+                            Keuntungan per produk langsung dihitung.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            📊
+                        </div>
+                        <h3>
+                            Rekap Omzet
+                        </h3>
+                        <p>
+                            Pantau total omzet, modal, dan profit
+                            berdasarkan transaksi yang kamu masukkan.
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            📦
+                        </div>
+                        <h3>
+                            Data Produk
+                        </h3>
+                        <p>
+                            Simpan harga supplier dan harga jual
+                            sehingga perhitungan bisa dilakukan otomatis.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- EXAMPLE -->
+        <section class="section" id="contoh">
+            <div class="container">
+                <div class="example">
+                    <div>
+                        <h2>
+                            Kamu cukup masukkan
+                            harga dan jumlah.
+                        </h2>
+                        <p>
+                            Contohnya supplier memberikan harga
+                            Rp6.000 dan kamu menjualnya Rp6.500.
+                            Sistem langsung mengetahui selisihnya.
+                        </p>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-row">
+                            <span>
+                                Harga supplier
+                            </span>
+                            <strong>
+                                Rp6.000
+                            </strong>
+                        </div>
+                        <div class="example-row">
+                            <span>
+                                Harga jual
+                            </span>
+                            <strong>
+                                Rp6.500
+                            </strong>
+                        </div>
+                        <div class="example-row">
+                            <span>
+                                Jumlah terjual
+                            </span>
+                            <strong>
+                                100 produk
+                            </strong>
+                        </div>
+                        <div class="example-row">
+                            <span>
+                                Modal
+                            </span>
+                            <strong>
+                                Rp600.000
+                            </strong>
+                        </div>
+                        <div class="example-row">
+                            <span>
+                                Omzet
+                            </span>
+                            <strong>
+                                Rp650.000
+                            </strong>
+                        </div>
+                        <div class="example-row">
+                            <span>
+                                Keuntungan
+                            </span>
+                            <strong class="example-profit">
+                                +Rp50.000
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- CTA -->
+        <section class="cta" id="mulai">
+            <div class="container">
+                <h2>
+                    Mulai kelola omzetmu.
+                </h2>
+                <p>
+                    Satu tempat untuk mencatat transaksi,
+                    menghitung profit, dan melihat perkembangan usaha.
+                </p>
+                <a href="#" class="btn btn-dark">
+                    Masuk ke Dashboard →
+                </a>
+            </div>
+        </section>
+    </main>
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    © 2026 OmzetKu
+                </div>
+                <div>
+                    Catat. Hitung. Kembangkan.
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
